@@ -21,6 +21,10 @@ class AuthenticationRepository {
     _controller.add(User(id: 'hello'));
   }
 
+  Future<void> signUp(User user) async {
+    _controller.add(user);
+  }
+
   Future<void> signOut() async {
     _controller.add(User.empty);
   }

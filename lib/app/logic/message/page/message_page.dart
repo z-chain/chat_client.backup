@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 import '../../logic.dart';
@@ -14,24 +15,35 @@ class MessagePage extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar(),
-      body: ListView.builder(
+  Widget _messages(BuildContext context) {
+    return BlocBuilder<MessageBloc, MessageState>(builder: (context, state) {
+      return ListView.builder(
         itemBuilder: (context, index) {
+          final item = state.messages[index];
           return MessageItem(
-            avatar: 'https://api.multiavatar.com/$index.png',
-            name: 'name $index',
-            message: 'message $index',
-            badge: index,
-            time: DateTime.now().toIso8601String(),
+            avatar: item.user.avatar,
+            name: item.user.address,
+            message: '${item.lastMessage?.type}',
+            badge: item.badge,
+            time: '${item.lastMessage?.createdAt}',
           ).padding(horizontal: 12).ripple().gestures(
               onTap: () => Navigator.of(context)
                   .push(ChatPage.route(user: AuthenticationUser.random())));
         },
-        itemCount: 50,
-      ),
-    );
+        itemCount: state.messages.length,
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: _appBar(),
+      body: _messages(context),
+    ).parent(({required child}) => BlocProvider(
+          create: (context) =>
+              MessageBloc(repository: MessageRepository(cache: context.read())),
+          child: child,
+        ));
   }
 }

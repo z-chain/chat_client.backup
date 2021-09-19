@@ -6,27 +6,24 @@ import '../authentication.dart';
 class AuthenticationRepository {
   final Cache cache;
 
-  final StreamController<User> _controller = StreamController();
+  final StreamController<AuthenticationUser> _controller = StreamController();
 
   AuthenticationRepository({required this.cache});
 
-  Stream<User> get user => _controller.stream.map((event) {
+  Stream<AuthenticationUser> get user => _controller.stream.map((event) {
         cache.cacheUser(event);
         return event;
       });
 
-  User get currentUser => cache.cachedUser() ?? User.empty;
+  AuthenticationUser get currentUser => cache.cachedUser() ?? AuthenticationUser.empty;
 
-  Future<void> create() async {
-    _controller.add(User(id: 'hello'));
-  }
 
-  Future<void> signUp(User user) async {
+  Future<void> signUp(AuthenticationUser user) async {
     _controller.add(user);
   }
 
   Future<void> signOut() async {
-    _controller.add(User.empty);
+    _controller.add(AuthenticationUser.empty);
   }
 
   void dispose() {

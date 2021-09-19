@@ -21,11 +21,11 @@ class AuthenticationBloc
   AuthenticationBloc({required this.repository})
       : super(repository.currentUser.isNotEmpty
             ? AuthenticationState.authenticated(repository.currentUser)
-            : const AuthenticationState.unauthenticated()) {
+            : AuthenticationState.unauthenticated) {
     _userStreamSubscription = repository.user.listen(_onUserChanged);
   }
 
-  void _onUserChanged(User user) =>
+  void _onUserChanged(AuthenticationUser user) =>
       this.add(AuthenticationUserChanged(user: user));
 
   @override
@@ -43,7 +43,7 @@ class AuthenticationBloc
       AuthenticationUserChanged event, AuthenticationState state) async* {
     yield event.user.isNotEmpty
         ? AuthenticationState.authenticated(event.user)
-        : AuthenticationState.unauthenticated();
+        : AuthenticationState.unauthenticated;
   }
 
   @override

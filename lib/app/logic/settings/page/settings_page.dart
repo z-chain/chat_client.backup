@@ -3,11 +3,12 @@ import 'package:chat_client/app/logic/settings/component/menu_group_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../logic.dart';
 
 class SettingsPage extends StatelessWidget {
-  Widget _userInfo() {
+  Widget _userInfo(BuildContext context) {
     return Flex(
       direction: Axis.horizontal,
       children: [
@@ -15,7 +16,12 @@ class SettingsPage extends StatelessWidget {
             .constrained(width: 96, height: 96)
             .alignment(Alignment.centerLeft)
             .expanded(),
-        IconButton(onPressed: () => print('go'), icon: Icon(Icons.qr_code))
+        BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            builder: (context, state) {
+          return IconButton(
+              onPressed: () => DialogUserQRCode.show(context, user: state.user),
+              icon: Icon(Icons.qr_code));
+        })
       ],
     ).padding(horizontal: 12).height(256);
   }
@@ -52,7 +58,9 @@ class SettingsPage extends StatelessWidget {
           MenuGroupItem(
               title: Text('退出').center(),
               child: SizedBox(),
-              onPressed: () => print('退出')),
+              onPressed: () => context
+                  .read<AuthenticationBloc>()
+                  .add(AuthenticationSignOut())),
         ]),
       ],
     );
@@ -64,7 +72,7 @@ class SettingsPage extends StatelessWidget {
       body: Flex(
         direction: Axis.vertical,
         children: [
-          _userInfo(),
+          _userInfo(context),
           _settings(context).scrollable().expanded(),
         ],
       ),

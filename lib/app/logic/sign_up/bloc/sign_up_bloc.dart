@@ -20,7 +20,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   ) async* {
     switch (event.runtimeType) {
       case SignUpRandom:
-        yield this.state.copyWith(user: User.random());
+        yield this.state.copyWith(user: AuthenticationUser.random());
         break;
       case SignUpSubmitted:
         this.repository.signUp(state.user);

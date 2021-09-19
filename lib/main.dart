@@ -6,7 +6,6 @@ import 'app/app.dart';
 import 'app/app_components.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 
   final SharedPreferences sharedPreferences =

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import '../logic/authentication/model/user.dart';
+import '../logic/authentication/model/authentication_user.dart';
 
 class Cache {
   final SharedPreferences sharedPreferences;
@@ -10,14 +10,14 @@ class Cache {
 
   static String _userCacheKey = 'user_cache_key';
 
-  User? cachedUser() {
+  AuthenticationUser? cachedUser() {
     final jsonStr = sharedPreferences.getString(_userCacheKey);
     if (jsonStr == null || jsonStr.isEmpty) return null;
     final json = jsonDecode(jsonStr);
-    return User.fromJson(json);
+    return AuthenticationUser.fromJson(json);
   }
 
-  void cacheUser(User user) {
+  void cacheUser(AuthenticationUser user) {
     sharedPreferences.setString(_userCacheKey, jsonEncode(user.toJson()));
   }
 }

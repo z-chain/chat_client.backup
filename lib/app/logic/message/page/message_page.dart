@@ -26,10 +26,9 @@ class MessagePage extends StatelessWidget {
             message: 'message $index',
             badge: index,
             time: DateTime.now().toIso8601String(),
-          )
-              .padding(horizontal: 12)
-              .ripple()
-              .gestures(onTap: () => print('$index'));
+          ).padding(horizontal: 12).ripple().gestures(
+              onTap: () => Navigator.of(context)
+                  .push(ChatPage.route(user: AuthenticationUser.random())));
         },
         itemCount: 50,
       ),

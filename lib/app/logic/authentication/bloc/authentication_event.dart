@@ -4,7 +4,7 @@ part of 'authentication_bloc.dart';
 abstract class AuthenticationEvent {}
 
 class AuthenticationUserChanged extends AuthenticationEvent {
-  final User user;
+  final AuthenticationUser user;
 
   AuthenticationUserChanged({required this.user});
 }

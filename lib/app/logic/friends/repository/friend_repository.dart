@@ -4,7 +4,7 @@ import 'package:chat_client/app/data/cache.dart';
 
 import '../../logic.dart';
 
-class FriendRepository {
+class FriendsRepository {
   final Cache cache;
 
   final StreamController<List<Friend>> _controller = StreamController();
@@ -14,7 +14,7 @@ class FriendRepository {
         return event;
       });
 
-  FriendRepository({required this.cache});
+  FriendsRepository({required this.cache});
 
   List<Friend> get currentFriends => cache.cachedFriends();
 

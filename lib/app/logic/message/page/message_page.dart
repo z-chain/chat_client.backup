@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
+// import 'package:image_picker/image_picker.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 
@@ -14,15 +14,15 @@ class MessagePage extends StatelessWidget {
         BlocBuilder<MessageBloc, MessageState>(builder: (context, state) {
           return IconButton(
               onPressed: () async {
-                final image =
-                    await ImagePicker().pickImage(source: ImageSource.gallery);
-                if (image != null) {
-                  final bytes = await image.readAsBytes();
-                  final code = await scanner.scanBytes(bytes);
-                  context
-                      .read<MessageBloc>()
-                      .add(MessageReceived(user: User(public: code)));
-                }
+                // final image =
+                //     await ImagePicker().pickImage(source: ImageSource.gallery);
+                // if (image != null) {
+                //   final bytes = await image.readAsBytes();
+                //   final code = await scanner.scanBytes(bytes);
+                //   context
+                //       .read<MessageBloc>()
+                //       .add(MessageReceived(user: User(public: code)));
+                // }
               },
               icon: Icon(Icons.qr_code_scanner));
         })

@@ -1,7 +1,10 @@
 import 'package:chat_client/app/logic/friends/container/friends_container.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../logic.dart';
 
@@ -73,7 +76,19 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Icons.add,
             color: theme.colorScheme.onPrimary,
           ),
-          onPressed: () => print('go'),
+          onPressed: () {
+            FilePicker.platform
+                .pickFiles(type: FileType.image, withData: true)
+                .then((value) async {
+              final bytes = value?.files.single.bytes;
+              if (bytes != null) {
+                final content = await scanner.scanBytes(bytes);
+                context
+                    .read<FriendsBloc>()
+                    .add(FriendsAdded(friend: Friend(public: content)));
+              }
+            });
+          },
           backgroundColor: theme.primaryColor,
         ).constrained(height: 56, width: 56),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

@@ -10,12 +10,12 @@ part 'friends_event.dart';
 
 part 'friends_state.dart';
 
-class FriendBloc extends Bloc<FriendsEvent, FriendsState> {
-  final FriendRepository repository;
+class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
+  final FriendsRepository repository;
 
   late StreamSubscription _streamSubscription;
 
-  FriendBloc({required this.repository})
+  FriendsBloc({required this.repository})
       : super(FriendsState.initial(repository.currentFriends)) {
     _streamSubscription = repository.friends.listen(_onFriendsChanged);
   }

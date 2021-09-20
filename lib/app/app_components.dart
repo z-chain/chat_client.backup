@@ -14,7 +14,11 @@ class AppComponents {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) => AuthenticationBloc(repository: context.read()))
+            create: (context) =>
+                AuthenticationBloc(repository: context.read())),
+        BlocProvider(
+            create: (context) => FriendsBloc(
+                repository: FriendsRepository(cache: context.read())))
       ],
       child: child,
     )

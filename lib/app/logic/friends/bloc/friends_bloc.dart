@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 import '../../logic.dart';
-import '../friend.dart';
+import '../friends.dart';
 
 part 'friends_event.dart';
 
@@ -20,7 +20,7 @@ class FriendBloc extends Bloc<FriendsEvent, FriendsState> {
     _streamSubscription = repository.friends.listen(_onFriendsChanged);
   }
 
-  void _onFriendsChanged(List<User> friends) =>
+  void _onFriendsChanged(List<Friend> friends) =>
       this.add(FriendsChanged(friends: friends));
 
   @override
@@ -30,9 +30,9 @@ class FriendBloc extends Bloc<FriendsEvent, FriendsState> {
     if (event is FriendsChanged) {
       yield this.state.copyWith(friends: event.friends);
     } else if (event is FriendsAdded) {
-      repository.add(event.user);
+      repository.add(event.friend);
     } else if (event is FriendsRemoved) {
-      repository.remove(event.user);
+      repository.remove(event.friend);
     }
   }
 

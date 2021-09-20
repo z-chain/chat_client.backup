@@ -4,19 +4,19 @@ part of 'friends_bloc.dart';
 abstract class FriendsEvent {}
 
 class FriendsAdded extends FriendsEvent {
-  final User user;
+  final Friend friend;
 
-  FriendsAdded({required this.user});
+  FriendsAdded({required this.friend});
 }
 
 class FriendsRemoved extends FriendsEvent{
-  final User user;
+  final Friend friend;
 
-  FriendsRemoved({required this.user});
+  FriendsRemoved({required this.friend});
 }
 
 class FriendsChanged extends FriendsEvent {
-  final List<User> friends;
+  final List<Friend> friends;
 
   FriendsChanged({required this.friends});
 }

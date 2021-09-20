@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:chat_client/app/data/cache.dart';
 
@@ -8,27 +7,27 @@ import '../../logic.dart';
 class FriendRepository {
   final Cache cache;
 
-  final StreamController<List<User>> _controller = StreamController();
+  final StreamController<List<Friend>> _controller = StreamController();
 
-  Stream<List<User>> get friends => _controller.stream.map((event) {
+  Stream<List<Friend>> get friends => _controller.stream.map((event) {
         cache.cacheFriends(event);
         return event;
       });
 
   FriendRepository({required this.cache});
 
-  List<User> get currentFriends => cache.cachedFriends();
+  List<Friend> get currentFriends => cache.cachedFriends();
 
-  void add(User user) {
+  void add(Friend friend) {
     final friends = currentFriends;
-    if (!friends.contains(user)) {
-      _controller.add([...friends, user]);
+    if (!friends.contains(friend)) {
+      _controller.add([...friends, friend]);
     }
   }
 
-  void remove(User user) {
+  void remove(Friend friend) {
     final friends = currentFriends;
-    if (friends.remove(user)) {
+    if (friends.remove(friend)) {
       _controller.add([...friends]);
     }
   }

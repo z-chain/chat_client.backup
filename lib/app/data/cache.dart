@@ -23,15 +23,15 @@ class Cache {
 
   static String _friendCacheKey = 'friends_cache_key';
 
-  List<User> cachedFriends() {
+  List<Friend> cachedFriends() {
     final strList = sharedPreferences.getStringList(_friendCacheKey) ?? [];
     return strList
         .map((e) => jsonDecode(e))
-        .map((e) => User.fromJson(e))
+        .map((e) => Friend.fromJson(e))
         .toList();
   }
 
-  void cacheFriends(List<User> friends) {
+  void cacheFriends(List<Friend> friends) {
     sharedPreferences.setStringList(_friendCacheKey,
         friends.map((e) => e.toJson()).map((e) => jsonEncode(e)).toList());
   }

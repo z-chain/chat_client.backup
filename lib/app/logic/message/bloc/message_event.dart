@@ -4,7 +4,9 @@ part of 'message_bloc.dart';
 abstract class MessageEvent {}
 
 class MessageReceived extends MessageEvent {
-  final types.Message message;
+  final User user;
 
-  MessageReceived({required this.message});
+  final types.Message? message;
+
+  MessageReceived({required this.user, this.message});
 }

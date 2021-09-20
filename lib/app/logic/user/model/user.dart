@@ -14,9 +14,17 @@ class User extends Equatable {
   const User({required this.public});
 
   @override
-  List<Object?> get props => [address];
+  List<Object?> get props => [public];
 
   static const empty = User(public: '');
+
+  factory User.fromJson(Map<String, dynamic> map) {
+    return User(public: map['public']);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {'public': public};
+  }
 }
 
 extension UserToMessageUser on User {

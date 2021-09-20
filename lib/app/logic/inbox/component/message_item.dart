@@ -32,7 +32,11 @@ class MessageItem extends StatelessWidget {
       height: 48,
     ).padding(all: 4).backgroundColor(Colors.black38).clipRRect(all: 56);
 
-    final name = Text(this.name).textStyle(theme.textTheme.headline6!);
+    final name = Text(
+      this.name,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    ).textStyle(theme.textTheme.headline6!);
 
     final message =
         Text(this.message).textColor(theme.primaryColor.withOpacity(0.8));

@@ -6,3 +6,4 @@ export 'settings/settings.dart';
 export 'about/about.dart';
 export 'chat/chat.dart';
 export 'user/user.dart';
+export 'inbox/inbox.dart';

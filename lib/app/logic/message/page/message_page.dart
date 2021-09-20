@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 
 import '../../logic.dart';
 
@@ -9,8 +11,21 @@ class MessagePage extends StatelessWidget {
     return AppBar(
       leading: MyAvatar().padding(all: 4, left: 12),
       actions: [
-        IconButton(
-            onPressed: () => print('scan'), icon: Icon(Icons.qr_code_scanner))
+        BlocBuilder<MessageBloc, MessageState>(builder: (context, state) {
+          return IconButton(
+              onPressed: () async {
+                final image =
+                    await ImagePicker().pickImage(source: ImageSource.gallery);
+                if (image != null) {
+                  final bytes = await image.readAsBytes();
+                  final code = await scanner.scanBytes(bytes);
+                  context
+                      .read<MessageBloc>()
+                      .add(MessageReceived(user: User(public: code)));
+                }
+              },
+              icon: Icon(Icons.qr_code_scanner));
+        })
       ],
     );
   }
@@ -23,9 +38,9 @@ class MessagePage extends StatelessWidget {
           return MessageItem(
             avatar: item.user.avatar,
             name: item.user.address,
-            message: '${item.lastMessage?.type}',
+            message: '${item.lastMessage?.type ?? ''}',
             badge: item.badge,
-            time: '${item.lastMessage?.createdAt}',
+            time: '${item.lastMessage?.createdAt ?? ''}',
           ).padding(horizontal: 12).ripple().gestures(
               onTap: () => Navigator.of(context)
                   .push(ChatPage.route(user: AuthenticationUser.random())));

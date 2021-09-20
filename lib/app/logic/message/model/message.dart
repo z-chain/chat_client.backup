@@ -17,9 +17,9 @@ class Message {
 
   bool get isNotEmpty => this != empty;
 
-  Message copyWith({types.Message? lastMessage, int? badge}) {
+  Message copyWith({User? user, types.Message? lastMessage, int? badge}) {
     return Message(
-        user: user,
+        user: user ?? this.user,
         badge: badge ?? this.badge,
         lastMessage: lastMessage ?? this.lastMessage);
   }

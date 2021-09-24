@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:chat_client/app/logic/message/repository/message_repository.dart';
+
 import '../../../data/cache.dart';
 import '../authentication.dart';
 
@@ -15,8 +17,8 @@ class AuthenticationRepository {
         return event;
       });
 
-  AuthenticationUser get currentUser => cache.cachedUser() ?? AuthenticationUser.empty;
-
+  AuthenticationUser get currentUser =>
+      cache.cachedUser() ?? AuthenticationUser.empty;
 
   Future<void> signUp(AuthenticationUser user) async {
     _controller.add(user);

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:chat_client/app/logic/authentication/model/authentication_status.dart';
+import 'package:chat_client/app/logic/message/repository/message_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
@@ -16,13 +17,18 @@ class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthenticationRepository repository;
 
+  final MessageRepository message;
+
   late StreamSubscription _userStreamSubscription;
 
-  AuthenticationBloc({required this.repository})
+  AuthenticationBloc({required this.repository, required this.message})
       : super(repository.currentUser.isNotEmpty
             ? AuthenticationState.authenticated(repository.currentUser)
             : AuthenticationState.unauthenticated) {
     _userStreamSubscription = repository.user.listen(_onUserChanged);
+    if (this.state.status == AuthenticationStatus.authenticated) {
+      _onUserChanged(this.state.user);
+    }
   }
 
   void _onUserChanged(AuthenticationUser user) =>
@@ -41,9 +47,15 @@ class AuthenticationBloc
 
   Stream<AuthenticationState> _mapUserChangedToState(
       AuthenticationUserChanged event, AuthenticationState state) async* {
-    yield event.user.isNotEmpty
-        ? AuthenticationState.authenticated(event.user)
-        : AuthenticationState.unauthenticated;
+    if (event.user.isNotEmpty) {
+      await this.message.connect(
+          host: 'broker-cn.emqx.io', port: 1883, clientId: event.user.address);
+      this.message.subscribe('z-chain/chat/message/${event.user.address}');
+      yield AuthenticationState.authenticated(event.user);
+    } else {
+      this.message.disconnect();
+      yield AuthenticationState.unauthenticated;
+    }
   }
 
   @override

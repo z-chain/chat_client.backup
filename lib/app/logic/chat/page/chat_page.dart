@@ -44,7 +44,7 @@ class ChatPage extends StatelessWidget {
                 ));
       });
     }).parent(({required child}) => BlocProvider(
-          create: (context) => ChatBloc(),
+          create: (context) => ChatBloc(repository: context.read(), user: user),
           child: child,
         ));
   }

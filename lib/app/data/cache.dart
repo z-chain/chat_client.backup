@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../logic/logic.dart';
 
 class Cache {
@@ -23,15 +24,15 @@ class Cache {
 
   static String _friendCacheKey = 'friends_cache_key';
 
-  List<Friend> cachedFriends() {
+  List<Contact> cachedFriends() {
     final strList = sharedPreferences.getStringList(_friendCacheKey) ?? [];
     return strList
         .map((e) => jsonDecode(e))
-        .map((e) => Friend.fromJson(e))
+        .map((e) => Contact.fromJson(e))
         .toList();
   }
 
-  void cacheFriends(List<Friend> friends) {
+  void cacheFriends(List<Contact> friends) {
     sharedPreferences.setStringList(_friendCacheKey,
         friends.map((e) => e.toJson()).map((e) => jsonEncode(e)).toList());
   }

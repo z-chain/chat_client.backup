@@ -1,4 +1,3 @@
-import 'package:chat_client/app/logic/message/repository/message_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -17,16 +16,13 @@ class AppComponents {
         BlocProvider(
             create: (context) => AuthenticationBloc(
                 repository: context.read(), message: context.read())),
-        BlocProvider(
-            create: (context) => FriendsBloc(
-                repository: FriendsRepository(cache: context.read())))
       ],
       child: child,
     )
         .parent(({required child}) => MultiRepositoryProvider(providers: [
               RepositoryProvider(
                   create: (context) => AuthenticationRepository(cache: cache)),
-              RepositoryProvider(create: (context) => MessageRepository())
+              RepositoryProvider(create: (context) => ChatRepository())
             ], child: child))
         .parent(({required child}) => MultiProvider(
               providers: [

@@ -1,4 +1,3 @@
-import 'package:chat_client/app/logic/friends/container/friends_container.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
@@ -46,17 +45,9 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
         body: TabBarView(
           controller: _tabController,
-          children: [InboxContainer(), FriendsContainer()],
+          children: [InboxContainer(), ContactContainer()],
         ),
         bottomNavigationBar: BottomAppBar(
-          // currentIndex: index,
-          // items: [
-          //   BottomNavigationBarItem(icon: Icon(Icons.inbox), label: '消息'),
-          //   BottomNavigationBarItem(icon: Icon(Icons.group), label: '好友')
-          // ],
-          // onTap: (index) {
-          //   _tabController.index = index;
-          // },
           child: Container(
             height: 56,
             child: TabBar(
@@ -84,8 +75,8 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
               if (bytes != null) {
                 final content = await scanner.scanBytes(bytes);
                 context
-                    .read<FriendsBloc>()
-                    .add(FriendsAdded(friend: Friend(public: content)));
+                    .read<ContactBloc>()
+                    .add(ContactAdded(contact: Contact(public: content)));
               }
             });
           },
@@ -94,6 +85,13 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
       leftChild: SettingsPage(),
-    );
+    ).parent(({required child}) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+                create: (context) => ContactBloc(
+                    repository: ContactRepository(cache: context.read())))
+          ],
+          child: child,
+        ));
   }
 }

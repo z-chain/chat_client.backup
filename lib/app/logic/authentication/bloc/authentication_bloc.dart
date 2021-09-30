@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:chat_client/app/logic/authentication/model/authentication_status.dart';
-import 'package:chat_client/app/logic/message/repository/message_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 
+import '../../logic.dart';
 import '../authentication.dart';
 
 part 'authentication_event.dart';
@@ -17,7 +17,7 @@ class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthenticationRepository repository;
 
-  final MessageRepository message;
+  final ChatRepository message;
 
   late StreamSubscription _userStreamSubscription;
 

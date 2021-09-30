@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:chat_client/app/logic/message/repository/message_repository.dart';
 
 import '../../../data/cache.dart';
 import '../authentication.dart';

@@ -22,7 +22,7 @@ class UserQRCodeState extends State<UserQRCode> {
   void initState() {
     super.initState();
     scanner
-        .generateBarCode(this.widget.user.public)
+        .generateBarCode(this.widget.user.address)
         .then((value) => this.setState(() {
               _image = value;
             }));

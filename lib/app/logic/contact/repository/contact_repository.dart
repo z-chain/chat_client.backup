@@ -8,32 +8,30 @@ import '../contact.dart';
 class ContactRepository {
   final Cache cache;
 
-  final StreamController<List<Contact>> _controller = StreamController();
+  StreamController<List<Contact>> _controller = StreamController.broadcast();
 
-  Stream<List<Contact>> get friends => _controller.stream.map((event) {
-        cache.cacheFriends(event);
-        return event;
-      });
+  late StreamSubscription _streamSubscription;
 
-  ContactRepository({required this.cache});
+  Stream<List<Contact>> get contact => _controller.stream;
 
-  List<Contact> get currentFriends => cache.cachedFriends();
-
-  void add(Contact friend) {
-    final friends = currentFriends;
-    if (!friends.contains(friend)) {
-      _controller.add([...friends, friend]);
-    }
+  ContactRepository({required this.cache}) {
+    _streamSubscription = _controller.stream.listen((event) {
+      cache.cacheContact(event);
+    });
   }
 
-  void remove(Contact friend) {
-    final friends = currentFriends;
-    if (friends.remove(friend)) {
-      _controller.add([...friends]);
-    }
+  List<Contact> get currentContact => cache.cachedContact();
+
+  void add(Contact contact) {
+    _controller.add([...currentContact, contact]);
+  }
+
+  void remove(Contact contact) {
+    _controller.add([...currentContact..remove(contact)]);
   }
 
   void dispose() {
     _controller.close();
+    _streamSubscription.cancel();
   }
 }

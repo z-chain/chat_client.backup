@@ -1,4 +1,4 @@
-part of 'friends_bloc.dart';
+part of 'contact_bloc.dart';
 
 @immutable
 class ContactState {

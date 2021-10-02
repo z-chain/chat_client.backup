@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 import '../../logic.dart';
 import '../chat.dart';
 
 class ChatPage extends StatelessWidget {
-  final User user;
+  final Contact user;
 
   const ChatPage({Key? key, required this.user}) : super(key: key);
 
-  static Route route({required User user}) => MaterialPageRoute(
+  static Route route({required Contact user}) => MaterialPageRoute(
       builder: (context) => ChatPage(
             user: user,
           ));
@@ -23,10 +23,11 @@ class ChatPage extends StatelessWidget {
         builder: (context, state) {
       final me =
           types.User(id: state.user.address, imageUrl: state.user.avatar);
-      final other = types.User(id: user.address, imageUrl: user.avatar);
       return BlocBuilder<ChatBloc, ChatState>(builder: (context, state) {
         return Chat(
                 messages: state.messages,
+                showUserAvatars: true,
+                showUserNames: true,
                 onSendPressed: (text) => context.read<ChatBloc>().add(ChatSent(
                     message: types.TextMessage(
                         author: me,
@@ -44,7 +45,7 @@ class ChatPage extends StatelessWidget {
                 ));
       });
     }).parent(({required child}) => BlocProvider(
-          create: (context) => ChatBloc(repository: context.read(), user: user),
+          create: (context) => ChatBloc(contact: user, mqtt: context.read()),
           child: child,
         ));
   }

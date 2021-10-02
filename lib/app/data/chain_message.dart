@@ -1,3 +1,4 @@
+import 'package:chat_client/app/logic/logic.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 abstract class ChainMessage {
@@ -15,6 +16,8 @@ abstract class ChainMessage {
       return ChainChatMessage.fromJson(map);
     } else if (type == 'online_user') {
       return ChainOnlineUser.fromJson(map);
+    } else if (type == 'contacts') {
+      return ChainContacts.fromJson(map);
     } else {
       return ChainUnsupportedMessage.fromJson(map);
     }
@@ -49,22 +52,29 @@ class ChainChatMessage extends ChainMessage {
 }
 
 class ChainOnlineUser extends ChainMessage {
+  final String? address;
+
   final String? public;
 
-  ChainOnlineUser({required this.public, required int time})
+  ChainOnlineUser(
+      {required this.address, required this.public, required int time})
       : super(type: ChainMessageType.online_user, time: time);
 
   @override
   Map<String, dynamic> toJson() {
     return {
       'type': 'online_user',
+      'address': address,
       'public': public,
       'time': time,
     };
   }
 
   factory ChainOnlineUser.fromJson(Map<String, dynamic> map) {
-    return ChainOnlineUser(public: map['public'], time: map['time']);
+    return ChainOnlineUser(
+        address: map['address'] ?? '',
+        public: map['public'],
+        time: map['time']);
   }
 }
 
@@ -83,4 +93,27 @@ class ChainUnsupportedMessage extends ChainMessage {
   }
 }
 
-enum ChainMessageType { chat, online_user, unsupported }
+class ChainContacts extends ChainMessage {
+  final List<Contact> contacts;
+
+  ChainContacts({required this.contacts, required int time})
+      : super(type: ChainMessageType.online_user, time: time);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'contacts',
+      'contacts': contacts.map((e) => e.toJson()).toList(),
+      'time': time,
+    };
+  }
+
+  factory ChainContacts.fromJson(Map<String, dynamic> map) {
+    return ChainContacts(
+        contacts:
+            (map['contacts'] as List).map((e) => Contact.fromJson(e)).toList(),
+        time: map['time']);
+  }
+}
+
+enum ChainMessageType { chat, online_user, contacts, unsupported }

@@ -458,7 +458,7 @@ packages:
     source: hosted
     version: "2.1.7"
   rxdart:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: rxdart
       url: "https://pub.flutter-io.cn"
@@ -526,7 +526,7 @@ packages:
     source: hosted
     version: "4.1.0"
   sqflite:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: sqflite
       url: "https://pub.flutter-io.cn"

@@ -5,9 +5,9 @@ import 'package:meta/meta.dart';
 
 import '../contact.dart';
 
-part 'friends_event.dart';
+part 'contact_event.dart';
 
-part 'friends_state.dart';
+part 'contact_state.dart';
 
 class ContactBloc extends Bloc<ContactEvent, ContactState> {
   final ContactRepository repository;
@@ -15,11 +15,11 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
   late StreamSubscription _streamSubscription;
 
   ContactBloc({required this.repository})
-      : super(ContactState.initial(repository.currentFriends)) {
-    _streamSubscription = repository.friends.listen(_onFriendsChanged);
+      : super(ContactState.initial(repository.currentContact)) {
+    _streamSubscription = repository.contact.listen(_onContactChanged);
   }
 
-  void _onFriendsChanged(List<Contact> contacts) =>
+  void _onContactChanged(List<Contact> contacts) =>
       this.add(ContactChanged(contacts: contacts));
 
   @override

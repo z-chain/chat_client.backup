@@ -85,13 +85,6 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
       leftChild: SettingsPage(),
-    ).parent(({required child}) => MultiBlocProvider(
-          providers: [
-            BlocProvider(
-                create: (context) => ContactBloc(
-                    repository: ContactRepository(cache: context.read())))
-          ],
-          child: child,
-        ));
+    );
   }
 }

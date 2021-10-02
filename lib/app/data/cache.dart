@@ -1,13 +1,30 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:chat_client/app/data/chain_message.dart';
+import 'package:chat_client/app/data/mqtt.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../logic/logic.dart';
 
 class Cache {
   final SharedPreferences sharedPreferences;
 
-  Cache({required this.sharedPreferences});
+  final Database database;
+
+  final MQtt mqtt;
+
+  late StreamSubscription _mqttToCacheSubscription;
+
+  Cache(
+      {required this.sharedPreferences,
+      required this.database,
+      required this.mqtt}) {
+    _mqttToCacheSubscription = mqtt.contacts.listen((event) {
+      _contacts = event;
+    });
+  }
 
   static String _userCacheKey = 'user_cache_key';
 
@@ -22,18 +39,24 @@ class Cache {
     sharedPreferences.setString(_userCacheKey, jsonEncode(user.toJson()));
   }
 
-  static String _friendCacheKey = 'friends_cache_key';
+  List<Contact> _contacts = [];
 
-  List<Contact> cachedFriends() {
-    final strList = sharedPreferences.getStringList(_friendCacheKey) ?? [];
-    return strList
-        .map((e) => jsonDecode(e))
-        .map((e) => Contact.fromJson(e))
-        .toList();
+  void cacheContact(List<Contact> contacts) {
+    _contacts = contacts;
+    mqtt.updateContacts(_contacts);
   }
 
-  void cacheFriends(List<Contact> friends) {
-    sharedPreferences.setStringList(_friendCacheKey,
-        friends.map((e) => e.toJson()).map((e) => jsonEncode(e)).toList());
+  List<Contact> cachedContact() {
+    return _contacts;
+  }
+
+  List<ChainOnlineUser> _onLineUsers = [];
+
+  List<ChainOnlineUser> cachedOnlineUsers() {
+    return _onLineUsers;
+  }
+
+  void close() {
+    _mqttToCacheSubscription.cancel();
   }
 }
